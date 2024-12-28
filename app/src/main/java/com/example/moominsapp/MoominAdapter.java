@@ -1,26 +1,35 @@
 package com.example.moominsapp;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.widget.Filter;
 import android.widget.Filterable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MoominAdapter extends RecyclerView.Adapter<MoominAdapter.MyViewHolder> implements Filterable {
 
     private final List<MoominModel> moominModels;
-    private final List<MoominModel> moominModelsFull; // Backup list for filtering
+    private final List<MoominModel> moominModelsFull;
+    private Dialog currentDialog; // Store the current Dialog instance
 
     public MoominAdapter(List<MoominModel> moominModels) {
         this.moominModels = new ArrayList<>(moominModels);
-        this.moominModelsFull = new ArrayList<>(moominModels); // Deep copy for filtering
+        this.moominModelsFull = new ArrayList<>(moominModels);
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -49,15 +58,63 @@ public class MoominAdapter extends RecyclerView.Adapter<MoominAdapter.MyViewHold
         holder.tvDescription.setText(currentItem.getMoominDesc());
         holder.imageView.setImageResource(currentItem.getImage());
 
-        // Handle row clicks
-        holder.itemView.setOnClickListener(v -> {
-            Toast.makeText(v.getContext(), "Clicked: " + currentItem.getMoominName(), Toast.LENGTH_SHORT).show();
-        });
+        // Handle row clicks to display a pop message for the selected character
+        holder.itemView.setOnClickListener(v -> displayPopMessage(holder.itemView, currentItem));
+    }
+
+    /**
+     * Display a pop message for a specific character.
+     *
+     * @param view         The view context for the Dialog.
+     * @param character    The MoominModel character to display.
+     */
+    public void displayPopMessage(View view, MoominModel character) {
+        // Dismiss the current dialog if it exists
+        dismissCurrentDialog();
+
+        // Create and configure a Dialog
+        currentDialog = new Dialog(view.getContext());
+        currentDialog.setContentView(R.layout.custom_pop_layout); // Use a custom layout file
+        currentDialog.setCancelable(true);
+
+        // Set Dialog width and height
+        if (currentDialog.getWindow() != null) {
+            currentDialog.getWindow().setLayout(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            currentDialog.getWindow().setGravity(Gravity.CENTER);
+        }
+
+        // Configure the Dialog content
+        ImageView imageView = currentDialog.findViewById(R.id.dialogImage);
+        TextView textView = currentDialog.findViewById(R.id.dialogText);
+        Button dismissButton = currentDialog.findViewById(R.id.dialogDismissButton);
+
+        if (imageView != null && textView != null && dismissButton != null) {
+            imageView.setImageResource(character.getImage());
+            textView.setText(character.getMoominName());
+            dismissButton.setText("Dismiss"); // Set a clear dismiss label
+            dismissButton.setOnClickListener(v -> dismissCurrentDialog());
+        }
+
+        // Show the Dialog
+        currentDialog.show();
+    }
+
+    /**
+     * Dismiss the current Dialog if it's displayed.
+     */
+    public void dismissCurrentDialog() {
+        if (currentDialog != null && currentDialog.isShowing()) {
+            currentDialog.dismiss();
+            currentDialog = null;
+        }
     }
 
     @Override
     public int getItemCount() {
-        return moominModels.size();
+        return moominModels != null ? moominModels.size() : 0; // Handle potential null list
     }
 
     @Override

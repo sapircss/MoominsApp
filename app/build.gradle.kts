@@ -3,6 +3,7 @@ plugins {
 }
 
 android {
+
     namespace = "com.example.moominsapp"
     compileSdk = 34
 
