@@ -30,16 +30,12 @@ public class MainActivity extends AppCompatActivity {
         setupRootTouchListener();
     }
 
-    /**
-     * Initialize the views.
-     */
+  
     private void initializeViews() {
         recyclerView = findViewById(R.id.moominsRecyclerView);
     }
 
-    /**
-     * Setup the RecyclerView with the adapter.
-     */
+   
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -55,28 +51,26 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    /**
-     * Setup the SearchView for filtering the RecyclerView.
-     */
+   
     private void setupSearchView() {
         SearchView searchView = findViewById(R.id.searchBar);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 dismissPopMessageIfVisible();
-                adapter.getFilter().filter(query.toLowerCase().trim()); // Ensure case-insensitive search
+                adapter.getFilter().filter(query.toLowerCase().trim()); 
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
                 dismissPopMessageIfVisible();
-                adapter.getFilter().filter(newText.toLowerCase().trim()); // Ensure case-insensitive search
+                adapter.getFilter().filter(newText.toLowerCase().trim()); 
                 return false;
             }
         });
 
-        // Dismiss pop message when the search bar is focused
+      
         searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 dismissPopMessageIfVisible();
@@ -84,9 +78,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Set up a touch listener for the root layout to dismiss the pop message.
-     */
+  
     private void setupRootTouchListener() {
         View rootView = findViewById(android.R.id.content);
         rootView.setOnTouchListener((v, event) -> {
@@ -97,20 +89,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Dismiss the pop-up message if it is currently visible.
-     */
+  
     private void dismissPopMessageIfVisible() {
         if (adapter != null) {
-            adapter.dismissCurrentDialog(); // Call the new method in MoominAdapter to dismiss the Dialog
+            adapter.dismissCurrentDialog(); 
         }
     }
 
-    /**
-     * Generate an ArrayList of MoominModel objects.
-     *
-     * @return ArrayList of MoominModel
-     */
+    
     private ArrayList<MoominModel> generateMoominsArr() {
         ArrayList<MoominModel> moomins = new ArrayList<>();
         if (Data.moomin_name != null && Data.moomin_des != null && Data.images != null && Data.id != null) {
