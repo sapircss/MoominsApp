@@ -63,7 +63,6 @@ public class MoominAdapter extends RecyclerView.Adapter<MoominAdapter.MyViewHold
     }
 
     /**
-     * Display a pop message for a specific character.
      *
      * @param view         The view context for the Dialog.
      * @param character    The MoominModel character to display.
@@ -74,7 +73,7 @@ public class MoominAdapter extends RecyclerView.Adapter<MoominAdapter.MyViewHold
 
         // Create and configure a Dialog
         currentDialog = new Dialog(view.getContext());
-        currentDialog.setContentView(R.layout.custom_pop_layout); // Use a custom layout file
+        currentDialog.setContentView(R.layout.custom_pop_layout); 
         currentDialog.setCancelable(true);
 
         // Set Dialog width and height
@@ -102,9 +101,7 @@ public class MoominAdapter extends RecyclerView.Adapter<MoominAdapter.MyViewHold
         currentDialog.show();
     }
 
-    /**
-     * Dismiss the current Dialog if it's displayed.
-     */
+  
     public void dismissCurrentDialog() {
         if (currentDialog != null && currentDialog.isShowing()) {
             currentDialog.dismiss();
